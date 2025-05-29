@@ -1,0 +1,119 @@
+[
+  {
+    "model": "accounts.user",
+    "pk": 10,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$YourSalt$YourHashedPassword",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "john.doe@test.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-01T00:00:00Z",
+      "phone_number": "+1234567890",
+      "address": "123 Main St, City, State",
+      "profile_picture": "",
+      "user_type": "patient",
+      "specialization": null,
+      "qualification": null,
+      "experience": null,
+      "gender": "male",
+      "date_of_birth": "1990-01-15",
+      "blood_group": "A+",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 11,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$test$test",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Jane",
+      "last_name": "Smith",
+      "email": "jane.smith@test.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-01T00:00:00Z",
+      "phone_number": "+1234567892",
+      "address": "456 Oak Ave, City, State",
+      "profile_picture": "",
+      "user_type": "patient",
+      "specialization": null,
+      "qualification": null,
+      "experience": null,
+      "gender": "female",
+      "date_of_birth": "1985-05-20",
+      "blood_group": "B+",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 12,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$test$test",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Bob",
+      "last_name": "Johnson",
+      "email": "bob.johnson@test.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-01T00:00:00Z",
+      "phone_number": "+1234567894",
+      "address": "789 Pine St, City, State",
+      "profile_picture": "",
+      "user_type": "patient",
+      "specialization": null,
+      "qualification": null,
+      "experience": null,
+      "gender": "male",
+      "date_of_birth": "1975-12-10",
+      "blood_group": "O-",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "hospital.patient",
+    "pk": 1,
+    "fields": {
+      "user": 10,
+      "emergency_contact": "+1234567891",
+      "medical_history": "No significant medical history",
+      "allergies": "None",
+      "date_of_birth": "1990-01-15",
+      "blood_group": "A+"
+    }
+  },
+  {
+    "model": "hospital.patient",
+    "pk": 2,
+    "fields": {
+      "user": 11,
+      "emergency_contact": "+1234567893",
+      "medical_history": "Diabetes Type 2, managed with medication",
+      "allergies": "Penicillin",
+      "date_of_birth": "1985-05-20",
+      "blood_group": "B+"
+    }
+  },
+  {
+    "model": "hospital.patient",
+    "pk": 3,
+    "fields": {
+      "user": 12,
+      "emergency_contact": "+1234567895",
+      "medical_history": "Hypertension, regular monitoring required",
+      "allergies": "Shellfish, Nuts",
+      "date_of_birth": "1975-12-10",
+      "blood_group": "O-"
+    }
+  }
+]

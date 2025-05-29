@@ -1,0 +1,46 @@
+# Development Dockerfile for Django Backend
+FROM python:3.11-slim
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV DJANGO_SETTINGS_MODULE=nlife_project.settings
+
+# Set work directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        postgresql-client \
+        build-essential \
+        libpq-dev \
+        gettext \
+        curl \
+        vim \
+        git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install development dependencies
+RUN pip install --no-cache-dir \
+    django-debug-toolbar \
+    django-extensions \
+    ipython \
+    pytest \
+    pytest-django
+
+# Copy project
+COPY . /app/
+
+# Create directories for static and media files
+RUN mkdir -p /app/staticfiles /app/media
+
+# Expose port
+EXPOSE 8000
+
+# Default command for development
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  # Django Backend for Render deployment
+  backend:
+    build:
+      context: ./nlife-backend
+      dockerfile: Dockerfile
+    container_name: nlife_backend_render
+    restart: unless-stopped
+    environment:
+      # Database connection via DATABASE_URL (Render PostgreSQL)
+      - DATABASE_URL=${DATABASE_URL}
+      
+      # Django settings
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+      - DJANGO_DEBUG=False
+      - DJANGO_ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS}
+      
+      # CORS settings for frontend
+      - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS}
+      
+      # Optional: Redis URL if using Redis on Render
+      - REDIS_URL=${REDIS_URL}
+    volumes:
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    ports:
+      - "8000:8000"
+    networks:
+      - nlife_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput &&
+             python create_superuser.py --force &&
+             gunicorn --bind 0.0.0.0:8000 --workers 3 nlife_project.wsgi:application"
+
+  # React Frontend for Render deployment
+  frontend:
+    build:
+      context: ./nlife-frontend
+      dockerfile: Dockerfile
+    container_name: nlife_frontend_render
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - nlife_network
+    environment:
+      # Update API URL to point to your Render backend service
+      - REACT_APP_API_URL=${REACT_APP_API_URL}
+
+volumes:
+  static_volume:
+  media_volume:
+
+networks:
+  nlife_network:
+    driver: bridge

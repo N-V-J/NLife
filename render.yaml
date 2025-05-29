@@ -1,0 +1,50 @@
+# Render Blueprint for NLife Application
+# This file defines the infrastructure for deploying NLife to Render
+
+databases:
+  - name: nlife-database
+    databaseName: nlife_db
+    user: nlife_user
+    plan: free  # Change to 'starter' or higher for production
+
+services:
+  # Backend Django Service
+  - type: web
+    name: nlife-backend-debug
+    env: docker
+    image:
+      url: navinvj/nlife-backend:auto-admin
+    plan: free  # Change to 'starter' or higher for production
+    healthCheckPath: /api/health/
+    envVars:
+      - key: DATABASE_URL
+        value: "postgresql://nlife_user:MJJE0Lo51dbcVK4hUG9k6cJEl1ZUBI7O@dpg-d0ro1ek9c44c73ce0iqg-a.oregon-postgres.render.com/nlife_db_rlrk"
+      - key: DJANGO_SECRET_KEY
+        value: "29)q2o-i9ipwj08-$-72ib-!bk6vatzsc7wufrr%nyjj7*+&zu"
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: DJANGO_ALLOWED_HOSTS
+        value: "nlife-backend-debug.onrender.com"
+      - key: CORS_ALLOWED_ORIGINS
+        value: "https://nlife-frontend-latest.onrender.com"
+
+  # Frontend React Service
+  - type: web
+    name: nlife-frontend-latest
+    env: docker
+    image:
+      url: navinvj/nlife-frontend:latest
+    plan: free
+    envVars:
+      - key: REACT_APP_BACKEND_URL
+        value: "https://nlife-backend-debug.onrender.com"
+      - key: REACT_APP_API_URL
+        value: "https://nlife-backend-debug.onrender.com/api"
+      - key: NODE_ENV
+        value: "production"
+
+  # Optional: Redis Service (uncomment if needed)
+  # - type: redis
+  #   name: nlife-redis
+  #   plan: free
+  #   maxmemoryPolicy: allkeys-lru
