@@ -55,5 +55,5 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8000/api/health/ || exit 1
 
-# Simple startup command with error handling
-CMD ["sh", "-c", "python manage.py migrate --noinput && python create_superuser.py --force && gunicorn --bind 0.0.0.0:$PORT --workers 3 --timeout 120 nlife_project.wsgi:application"]
+# Start with basic gunicorn only
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "2", "--timeout", "60", "nlife_project.wsgi:application"]
