@@ -37,6 +37,10 @@ COPY . /app/
 # Create directories for static and media files
 RUN mkdir -p /app/staticfiles /app/media
 
+# Copy and set up startup script
+COPY startup.sh /app/startup.sh
+RUN chmod +x /app/startup.sh
+
 # Collect static files
 RUN python manage.py collectstatic --noinput
 
@@ -52,5 +56,5 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8000/api/health/ || exit 1
 
-# Default command with migrations
-CMD ["sh", "-c", "python manage.py migrate && python manage.py collectstatic --noinput && (python manage.py create_admin || echo 'Admin creation skipped') && gunicorn --bind 0.0.0.0:8000 --workers 3 nlife_project.wsgi:application"]
+# Simple startup command with error handling
+CMD ["sh", "-c", "python manage.py migrate --noinput && python create_superuser.py --force && gunicorn --bind 0.0.0.0:$PORT --workers 3 --timeout 120 nlife_project.wsgi:application"]
