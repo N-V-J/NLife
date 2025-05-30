@@ -1,11 +1,11 @@
 from rest_framework import viewsets, permissions, status, filters
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from .models import Specialty, Doctor, Patient, Appointment, Review, TimeSlot, MedicalRecord
+from .models import Specialty, Doctor, Patient, Appointment, TimeSlot, MedicalRecord
 from .serializers import (
     SpecialtySerializer, DoctorSerializer, DoctorListSerializer, DoctorUpdateSerializer,
     PatientSerializer, PatientListSerializer, AppointmentSerializer, AppointmentCreateSerializer,
-    AppointmentUpdateSerializer, ReviewSerializer, ReviewCreateSerializer,
+    AppointmentUpdateSerializer,
     TimeSlotSerializer, MedicalRecordSerializer, MedicalRecordCreateSerializer
 )
 
@@ -110,12 +110,7 @@ class DoctorViewSet(viewsets.ModelViewSet):
         serializer = TimeSlotSerializer(time_slots, many=True)
         return Response(serializer.data)
 
-    @action(detail=True, methods=['get'])
-    def reviews(self, request, pk=None):
-        doctor = self.get_object()
-        reviews = Review.objects.filter(doctor=doctor)
-        serializer = ReviewSerializer(reviews, many=True)
-        return Response(serializer.data)
+
 
     @action(detail=True, methods=['get'])
     def appointments(self, request, pk=None):
@@ -307,16 +302,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         print(f"Returning {len(serializer.data)} appointments")
         return Response(serializer.data)
 
-class ReviewViewSet(viewsets.ModelViewSet):
-    """ViewSet for the Review model"""
 
-    queryset = Review.objects.all()
-    permission_classes = [permissions.IsAuthenticated, IsOwnerOrAdmin]
-
-    def get_serializer_class(self):
-        if self.action == 'create':
-            return ReviewCreateSerializer
-        return ReviewSerializer
 
 class TimeSlotViewSet(viewsets.ModelViewSet):
     """ViewSet for the TimeSlot model"""

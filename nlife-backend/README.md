@@ -9,7 +9,7 @@ This is the backend API for the NLife Hospital Booking System, built with Django
 - Doctor and specialty management
 - Appointment scheduling and management
 - Patient medical records
-- Doctor reviews and ratings
+
 - Time slot management for doctor availability
 
 ## Tech Stack
@@ -156,13 +156,7 @@ The API documentation is available at:
 - `DELETE /api/appointments/{id}/`: Delete an appointment
 - `GET /api/appointments/my-appointments/`: Get current user's appointments
 
-### Reviews
 
-- `GET /api/reviews/`: List all reviews
-- `POST /api/reviews/`: Create a new review
-- `GET /api/reviews/{id}/`: Get review details
-- `PUT /api/reviews/{id}/`: Update a review
-- `DELETE /api/reviews/{id}/`: Delete a review
 
 ### Time Slots
 

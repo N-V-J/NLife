@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Specialty, Doctor, Patient, Appointment, Review, TimeSlot, MedicalRecord
+from .models import Specialty, Doctor, Patient, Appointment, TimeSlot, MedicalRecord
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -153,22 +153,7 @@ class AppointmentUpdateSerializer(serializers.ModelSerializer):
         model = Appointment
         fields = ['status', 'payment_status']
 
-class ReviewSerializer(serializers.ModelSerializer):
-    """Serializer for the Review model"""
 
-    patient = PatientListSerializer(read_only=True)
-
-    class Meta:
-        model = Review
-        fields = '__all__'
-        read_only_fields = ['created_at']
-
-class ReviewCreateSerializer(serializers.ModelSerializer):
-    """Serializer for creating reviews"""
-
-    class Meta:
-        model = Review
-        fields = ['doctor', 'patient', 'appointment', 'rating', 'comment']
 
 class MedicalRecordSerializer(serializers.ModelSerializer):
     """Serializer for the MedicalRecord model"""

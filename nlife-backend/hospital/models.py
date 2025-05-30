@@ -27,8 +27,6 @@ class Doctor(models.Model):
     end_time = models.TimeField(blank=True, null=True)
     is_available = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)
-    rating = models.DecimalField(max_digits=3, decimal_places=2, default=0)
-    total_reviews = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f"Dr. {self.user.first_name} {self.user.last_name}"
@@ -74,28 +72,7 @@ class Appointment(models.Model):
     def __str__(self):
         return f"{self.patient} - {self.doctor} - {self.appointment_date}"
 
-class Review(models.Model):
-    """Review model for doctor reviews"""
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='reviews')
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='reviews')
-    appointment = models.OneToOneField(Appointment, on_delete=models.SET_NULL, null=True, blank=True, related_name='review')
-    rating = models.PositiveIntegerField(choices=[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')])
-    comment = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.patient} - {self.doctor} - {self.rating}"
-
-    def save(self, *args, **kwargs):
-        """Update doctor's rating when a review is saved"""
-        super().save(*args, **kwargs)
-        # Update doctor's rating
-        doctor = self.doctor
-        reviews = doctor.reviews.all()
-        total_rating = sum(review.rating for review in reviews)
-        doctor.total_reviews = len(reviews)
-        doctor.rating = total_rating / doctor.total_reviews if doctor.total_reviews > 0 else 0
-        doctor.save()
 
 class TimeSlot(models.Model):
     """Time slots for doctor availability"""

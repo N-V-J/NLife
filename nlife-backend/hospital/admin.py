@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django import forms
 from django.utils.html import format_html
-from .models import Specialty, Doctor, Patient, Appointment, Review, TimeSlot, MedicalRecord
+from .models import Specialty, Doctor, Patient, Appointment, TimeSlot, MedicalRecord
 
 class DoctorAdminForm(forms.ModelForm):
     """Custom form for Doctor admin to include profile picture field from User model"""
@@ -38,7 +38,7 @@ class SpecialtyAdmin(admin.ModelAdmin):
 @admin.register(Doctor)
 class DoctorAdmin(admin.ModelAdmin):
     form = DoctorAdminForm
-    list_display = ('profile_picture_display', '__str__', 'specialty', 'experience_years', 'consultation_fee', 'is_available', 'is_featured', 'rating')
+    list_display = ('profile_picture_display', '__str__', 'specialty', 'experience_years', 'consultation_fee', 'is_available', 'is_featured')
     list_filter = ('specialty', 'is_available', 'is_featured')
     search_fields = ('user__first_name', 'user__last_name', 'user__email', 'bio', 'education')
 
@@ -53,9 +53,8 @@ class DoctorAdmin(admin.ModelAdmin):
         (None, {'fields': ('user', 'specialty', 'profile_picture')}),
         ('Professional Details', {'fields': ('bio', 'education', 'experience_years', 'consultation_fee')}),
         ('Availability', {'fields': ('available_days', 'start_time', 'end_time', 'is_available')}),
-        ('Additional Info', {'fields': ('is_featured', 'rating', 'total_reviews')}),
+        ('Additional Info', {'fields': ('is_featured',)}),
     )
-    readonly_fields = ('rating', 'total_reviews')
 
 class PatientAdminForm(forms.ModelForm):
     """Custom form for Patient admin to include profile picture field from User model"""
@@ -109,11 +108,7 @@ class AppointmentAdmin(admin.ModelAdmin):
     search_fields = ('doctor__user__first_name', 'doctor__user__last_name', 'patient__user__first_name', 'patient__user__last_name')
     date_hierarchy = 'appointment_date'
 
-@admin.register(Review)
-class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('doctor', 'patient', 'rating', 'created_at')
-    list_filter = ('rating', 'created_at')
-    search_fields = ('doctor__user__first_name', 'doctor__user__last_name', 'patient__user__first_name', 'patient__user__last_name', 'comment')
+
 
 @admin.register(TimeSlot)
 class TimeSlotAdmin(admin.ModelAdmin):
