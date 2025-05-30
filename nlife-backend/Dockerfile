@@ -37,9 +37,8 @@ COPY . /app/
 # Create directories for static and media files
 RUN mkdir -p /app/staticfiles /app/media
 
-# Copy and set up startup script
+# Copy startup script (optional)
 COPY startup.sh /app/startup.sh
-RUN chmod +x /app/startup.sh
 
 # Collect static files
 RUN python manage.py collectstatic --noinput
